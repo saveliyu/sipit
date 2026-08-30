@@ -1,20 +1,24 @@
 [tool.poetry]
-name = "coffe-shop"
+name = "auth-service"
 version = "0.1.0"
-description = ""
+description = "Auth microservice"
 authors = ["saveliyu <uljanoff.sav@yandex.ru>"]
 readme = "README.md"
-
-packages = [
-    { include = "app", from = "services/auth" }
-]
 
 [tool.poetry.dependencies]
 python = "^3.14"
 fastapi = "^0.141.1"
-pydantic-settings = "^2.15.0"
+sqlalchemy = "^2.0.52"
+alembic = "^1.19.1"
+uvicorn = "^0.52.4"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.1.1"
+pytest-asyncio = "^1.4.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
