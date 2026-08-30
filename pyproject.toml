@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "coffe-shop"
+version = "0.1.0"
+description = ""
+authors = ["saveliyu <uljanoff.sav@yandex.ru>"]
+readme = "README.md"
+
+packages = [
+    { include = "app", from = "services/auth" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.14"
+fastapi = "^0.141.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,7 @@
+services:
+  auth-service:
+    build:
+      dockerfile: Dockerfile
+      args:
+        INTEGRATIONAL_ARGS: ""
+    command: "pytest"

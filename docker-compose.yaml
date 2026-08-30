@@ -1,0 +1,2 @@
+include:
+  - services/auth/docker-compose.yaml
