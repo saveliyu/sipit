@@ -3,7 +3,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Body, status
 
-from app.api.schemas.tokens import TokenResponse, TokenRequest
+from app.api.schemas.token import TokenResponse, TokenRequest
 from app.api.schemas.types import UserRole
 from app.api.schemas.user import UserRegister, UserRead, UserLogin
 

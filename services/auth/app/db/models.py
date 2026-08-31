@@ -1,18 +1,14 @@
 from datetime import datetime
-from enum import StrEnum
 
 from sqlalchemy import func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+from app.api.schemas.types import UserRole
 
 
 class Base(DeclarativeBase):
     id: Mapped[int] = mapped_column(primary_key=True)
 
-
-class UserRole(StrEnum):
-    ADMIN = "admin"
-    EMPLOYEE = "employee"
-    CUSTOMER = "customer"
 
 
 class UserModel(Base):
