@@ -17,8 +17,13 @@ async def health_check():
 
 @router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 async def register(data: Annotated[UserRegister, Body()]):
-    return UserRead(id=1, full_name=data.full_name, phone_number=data.phone_number, role=UserRole.CUSTOMER,
-                    created_at=datetime.now())
+    return UserRead(
+        id=1,
+        full_name=data.full_name,
+        phone_number=data.phone_number,
+        role=UserRole.CUSTOMER,
+        created_at=datetime.now(),
+    )
 
 
 @router.post("/login", response_model=TokenResponse)

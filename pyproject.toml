@@ -13,6 +13,7 @@ packages = [
 python = "^3.14"
 fastapi = "^0.141.1"
 pydantic-settings = "^2.15.0"
+black = "^26.5.1"
 
 
 [build-system]

@@ -42,4 +42,3 @@ db_helper = DbHelper(
     echo=settings.db.echo,
     echo_pool=settings.db.echo_pool,
 )
-
