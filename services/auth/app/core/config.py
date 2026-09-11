@@ -1,13 +1,25 @@
+import base64
 from pathlib import Path
 from pydantic import BaseModel, PostgresDsn, computed_field, RedisDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class JWTConfig(BaseModel):
-    secret_key: str
-    algorithm: str = "HS256"
+    private_key_b64: str
+    public_key_b64: str
+    algorithm: str = "RS256"
     access_token_expire_minutes: int = 15
     refresh_token_expire_days: int = 7
+
+    @computed_field
+    @property
+    def private_key(self) -> str:
+        return base64.b64decode(self.private_key_b64).decode("utf-8")
+
+    @computed_field
+    @property
+    def public_key(self) -> str:
+        return base64.b64decode(self.public_key_b64).decode("utf-8")
 
 
 class RedisConfig(BaseModel):

@@ -13,3 +13,8 @@ class RuPhoneNumber(PhoneNumber):
     default_region_code = "RU"
     supported_regions = ["RU"]
     phone_format = "INTERNATIONAL"
+
+
+class TokenType(StrEnum):
+    ACCESS = "access"
+    REFRESH = "refresh"
