@@ -1,11 +1,11 @@
 import uuid
-from datetime import datetime, timezone, timedelta
-
 import jwt
+
+from datetime import datetime, timezone, timedelta
 from pwdlib import PasswordHash
 
 from app.api.schemas.token import TokenPayload
-from app.api.schemas.types import TokenType, UserRole
+from app.api.schemas.types import TokenType
 from app.core.config import settings
 
 password_hash = PasswordHash.recommended()

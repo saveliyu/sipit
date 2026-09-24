@@ -14,7 +14,7 @@ class UserRegister(BaseModel):
 
 
 class UserLogin(BaseModel):
-    full_name: str
+    phone_number: RuPhoneNumber
     password: str
 
 
@@ -28,3 +28,8 @@ class UserRead(BaseModel):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class UserData(BaseModel):
+    id: int
+    role: UserRole
