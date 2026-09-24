@@ -7,6 +7,7 @@ from starlette import status
 
 from app.api.schemas.types import TokenType
 from app.api.schemas.user import UserData
+from app.core.exceptions import CredentialsException
 from app.core.security import decode_token
 from app.db.database import db_helper
 from app.repositories.user import UserRepository
@@ -16,23 +17,16 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
 def get_user(access_token: Annotated[str, Depends(oauth2_scheme)]) -> UserData:
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
+
     payload = decode_token(access_token, TokenType.ACCESS)
     if not payload:
-        raise credentials_exception
+        raise CredentialsException
 
     user_id = payload.get("sub")
     user_role = payload.get("role")
 
-    if user_role is None:
-        raise credentials_exception
-
-    if user_id is None:
-        raise credentials_exception
+    if user_role is None or user_id is None:
+        raise CredentialsException
 
     return UserData(id=int(user_id), role=user_role)
 

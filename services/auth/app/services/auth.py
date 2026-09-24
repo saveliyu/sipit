@@ -1,7 +1,10 @@
-from fastapi import HTTPException, status
-
 from app.api.schemas.token import TokenResponse, TokenPayload
 from app.api.schemas.user import UserRegister, UserLogin
+from app.core.exceptions import (
+    PasswordsDoesntMatchException,
+    PhoneNumberAlreadyExistsException,
+    UserNotFoundOrPasswordIncorrectException,
+)
 from app.db.models import UserModel
 from app.repositories.user import UserRepository
 from app.core.security import (
@@ -19,15 +22,11 @@ class AuthService:
 
     async def register(self, data: UserRegister) -> UserModel:
         if data.password != data.password_confirmation:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
+            raise PasswordsDoesntMatchException
 
         user = await self._repo.get_user_by_phone(str(data.phone_number))
         if user is not None:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-            )
+            raise PhoneNumberAlreadyExistsException
 
         hashed_password = get_password_hash(data.password)
 
@@ -43,14 +42,10 @@ class AuthService:
     async def login(self, data: UserLogin) -> TokenResponse:
         user = await self._repo.get_user_by_phone(str(data.phone_number))
         if user is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-            )
+            raise UserNotFoundException
 
         if not verify_password(data.password, user.hashed_password):
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-            )
+            raise UserNotFoundOrPasswordIncorrectException
 
         payload = TokenPayload(sub=str(user.id), role=user.role)
 

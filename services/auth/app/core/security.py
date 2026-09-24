@@ -7,6 +7,12 @@ from pwdlib import PasswordHash
 from app.api.schemas.token import TokenPayload
 from app.api.schemas.types import TokenType
 from app.core.config import settings
+from app.core.exceptions import (
+    ExpiredTokenException,
+    InvalidTokenException,
+    InvalidTokenPayloadException,
+    InvalidTokenTypeException,
+)
 
 password_hash = PasswordHash.recommended()
 
@@ -55,14 +61,14 @@ def decode_token(token: str, expected_type: str) -> dict:
             token, settings.jwt.public_key, algorithms=[settings.jwt.algorithm]
         )
     except jwt.ExpiredSignatureError:
-        raise Exception("Expired token")
+        raise ExpiredTokenException
     except jwt.InvalidTokenError:
-        raise Exception("Invalid token")
+        raise InvalidTokenException
 
     if "sub" not in payload:
-        raise Exception("Invalid token payload")
+        raise InvalidTokenPayloadException
 
     if payload["type"] != expected_type:
-        raise Exception("Invalid token type")
+        raise InvalidTokenTypeException
 
     return payload
