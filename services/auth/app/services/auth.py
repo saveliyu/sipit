@@ -22,12 +22,12 @@ class AuthService:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
-        #
-        # user = self._repo.get_user_by_phone(str(data.phone_number))
-        # if user is not None:
-        #     raise HTTPException(
-        #         status_code=status.HTTP_409_CONFLICT,
-        #     )
+
+        user = await self._repo.get_user_by_phone(str(data.phone_number))
+        if user is not None:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+            )
 
         hashed_password = get_password_hash(data.password)
 
