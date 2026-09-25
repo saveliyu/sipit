@@ -14,6 +14,11 @@ class PhoneNumberAlreadyExistsException(ApiException):
     detail: str = "Phone Number Already Exists"
 
 
+class UserNotFoundException(ApiException):
+    status_code: int = 404
+    detail: str = "User Not Found"
+
+
 class UserNotFoundOrPasswordIncorrectException(ApiException):
     status_code: int = 403
     detail: str = "User Not Found or Password Incorrect"
