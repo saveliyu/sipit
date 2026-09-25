@@ -3,13 +3,15 @@ from typing import Annotated
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette import status
+from redis.asyncio import Redis
 
 from app.api.schemas.types import TokenType
 from app.api.schemas.user import UserData
 from app.core.exceptions import CredentialsException
 from app.core.security import decode_token
 from app.db.database import db_helper
+from app.db.redis import get_redis_client
+from app.repositories.auth import AuthRedisRepository
 from app.repositories.user import UserRepository
 from app.services.auth import AuthService
 
@@ -43,6 +45,11 @@ def get_auth_service(
 ) -> AuthService:
     service = AuthService(repo)
     return service
+
+
+def get_auth_repo(redis: Annotated[Redis, Depends(get_redis_client)]):
+    repo = AuthRedisRepository(redis)
+    return repo
 
 
 AuthServiceDepends = Annotated[AuthService, Depends(get_auth_service)]

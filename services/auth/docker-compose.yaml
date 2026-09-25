@@ -8,6 +8,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - .:/app
   postgres:
@@ -28,6 +30,25 @@ services:
       interval: 5s
       timeout: 3s
       retries: 3
+  redis:
+    image: redis:8-alpine
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS__PASSWORD}
+    command: >
+      sh -c '
+        mkdir -p /usr/local/etc/redis &&
+        echo "bind 0.0.0.0" > /usr/local/etc/redis/redis.conf &&
+        echo "requirepass $REDIS__PASSWORD" >> /usr/local/etc/redis/redis.conf &&
+        redis-server /usr/local/etc/redis/redis.conf
+      '
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
 
 volumes:
   pgdata:

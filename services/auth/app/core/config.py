@@ -25,14 +25,15 @@ class JWTConfig(BaseModel):
 class RedisConfig(BaseModel):
     host: str = "localhost"
     port: int = 6379
-    path: str = "0"
+    db: str = "0"
+    password: str = ""
 
-    @computed_field
-    @property
-    def url(self) -> RedisDsn:
-        return RedisDsn.build(
-            scheme="redis", host=self.host, port=self.port, path=self.path
-        )
+    # @computed_field
+    # @property
+    # def url(self) -> RedisDsn:
+    #     return RedisDsn.build(
+    #         scheme="redis", host=self.host, port=self.port, path=self.path
+    #     )
 
 
 class DataBaseConfig(BaseModel):
