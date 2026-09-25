@@ -40,16 +40,17 @@ def get_user_repo(
     return repo
 
 
-def get_auth_service(
-    repo: Annotated[UserRepository, Depends(get_user_repo)],
-) -> AuthService:
-    service = AuthService(repo)
-    return service
-
-
 def get_auth_repo(redis: Annotated[Redis, Depends(get_redis_client)]):
     repo = AuthRedisRepository(redis)
     return repo
+
+
+def get_auth_service(
+    repo: Annotated[UserRepository, Depends(get_user_repo)],
+    redis: Annotated[AuthRedisRepository, Depends(get_auth_repo)],
+) -> AuthService:
+    service = AuthService(repo, redis)
+    return service
 
 
 AuthServiceDepends = Annotated[AuthService, Depends(get_auth_service)]

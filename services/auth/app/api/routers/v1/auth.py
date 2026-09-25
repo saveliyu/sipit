@@ -4,7 +4,7 @@ from fastapi import APIRouter, Body, status, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.api.dependencies import AuthServiceDepends, GetUserDepends
-from app.api.schemas.token import TokenResponse
+from app.api.schemas.token import TokenResponse, TokenRequest
 from app.api.schemas.types import RuPhoneNumber
 from app.api.schemas.user import UserRegister, UserRead, UserLogin
 
@@ -40,9 +40,16 @@ async def login(
     return tokens
 
 
-# @router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
-# async def logout(data: Annotated[TokenRequest, Body()]):
-#     return
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+async def logout(
+    data: Annotated[TokenRequest, Body()],
+    user: GetUserDepends,
+    service: AuthServiceDepends,
+):
+    await service.logout(data, user)
+    return
+
+
 #
 #
 # @router.post("/refresh", response_model=TokenResponse)

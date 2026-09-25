@@ -15,3 +15,4 @@ class TokenRequest(BaseModel):
 class TokenPayload(BaseModel):
     sub: str
     role: UserRole
+    jti: str

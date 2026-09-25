@@ -30,7 +30,6 @@ def _create_token(data: TokenPayload, token_expire: timedelta, token_type: str) 
     expire = datetime.now(timezone.utc) + token_expire
 
     to_encode.update({"exp": expire})
-    to_encode.update({"jti": str(uuid.uuid4())})
     to_encode.update({"type": token_type})
 
     encoded_jwt = jwt.encode(
